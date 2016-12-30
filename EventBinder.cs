@@ -1,6 +1,4 @@
 using EPiServer.Core;
-using EPiServer.Framework.Initialization;
-using EPiServer.ServiceLocation;
 using Toders.EPiEventHelper.EventHandlers;
 using Toders.EPiEventHelper.EventHandlers.Content;
 
@@ -8,24 +6,27 @@ namespace Toders.EPiEventHelper
 {
     public class EventBinder
     {
-        public static void BindEvents()
-        {
-            IContentEvents contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
+        private readonly IContentEvents _contentEvents;
 
-            BindContentEvents(contentEvents);
-            BindContentLanguageEvents(contentEvents);
-            BindContentVersionEvents(contentEvents);
-            BindContentChildrenEvents(contentEvents);
+        public EventBinder(IContentEvents contentEvents)
+        {
+            this._contentEvents = contentEvents;
         }
 
-        public static void UnbindEvents()
+        public void BindEvents()
         {
-            IContentEvents contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
+            BindContentEvents(_contentEvents);
+            BindContentLanguageEvents(_contentEvents);
+            BindContentVersionEvents(_contentEvents);
+            BindContentChildrenEvents(_contentEvents);
+        }
 
-            UnbindContentEvents(contentEvents);
-            UnbindContentLanguageEvents(contentEvents);
-            UnbindContentVersionEvents(contentEvents);
-            UnbindContentChildrenEvents(contentEvents);
+        public void UnbindEvents()
+        {
+            UnbindContentEvents(_contentEvents);
+            UnbindContentLanguageEvents(_contentEvents);
+            UnbindContentVersionEvents(_contentEvents);
+            UnbindContentChildrenEvents(_contentEvents);
         }
 
         private static void BindContentEvents(IContentEvents contentEvents)
