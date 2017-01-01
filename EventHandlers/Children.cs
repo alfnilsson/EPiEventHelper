@@ -3,21 +3,28 @@ using Toders.EPiEventHelper.Events;
 
 namespace Toders.EPiEventHelper.EventHandlers
 {
-    public static class Children
+    public class Children
     {
-        public static void LoadingChildren(object sender, ChildrenEventArgs eventArgs)
+        private readonly IEventRunner _eventRunner;
+
+        public Children(IEventRunner eventRunner)
         {
-            Runner.Run<ILoadingChildren>(e => e.LoadingChildren(sender, eventArgs));
+            _eventRunner = eventRunner;
         }
 
-        public static void LoadedChildren(object sender, ChildrenEventArgs eventArgs)
+        public void LoadingChildren(object sender, ChildrenEventArgs args)
         {
-            Runner.Run<ILoadedChildren>(e => e.LoadedChildren(sender, eventArgs));
+            _eventRunner.Run<ILoadingChildren>(e => e.LoadingChildren(sender, args));
         }
 
-        public static void FailedLoadingChildren(object sender, ChildrenEventArgs eventArgs)
+        public void LoadedChildren(object sender, ChildrenEventArgs args)
         {
-            Runner.Run<IFailedLoadingChildren>(e => e.FailedLoadingChildren(sender, eventArgs));
+            _eventRunner.Run<ILoadedChildren>(e => e.LoadedChildren(sender, args));
+        }
+
+        public void FailedLoadingChildren(object sender, ChildrenEventArgs args)
+        {
+            _eventRunner.Run<IFailedLoadingChildren>(e => e.FailedLoadingChildren(sender, args));
         }
     }
 }

@@ -4,6 +4,6 @@ namespace Toders.EPiEventHelper.Events
 {
     public interface ICheckedOutContent
     {
-        void CheckedOutContent(object sender, ContentEventArgs eventArgs);
+        void CheckedOutContent(object sender, ContentEventArgs args);
     }
 }

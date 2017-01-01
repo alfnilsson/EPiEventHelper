@@ -5,14 +5,14 @@ namespace Toders.EPiEventHelper.EventHandlers.Content
 {
     public static class ContentMove
     {
-        public static void MovingContent(object sender, ContentEventArgs eventArgs)
+        public static void MovingContent(object sender, ContentEventArgs args)
         {
-            Runner.Run<IMovingContent>(e => e.MovingContent(sender, eventArgs));
+            EventRunner.Execute<IMovingContent>(e => e.MovingContent(sender, args));
         }
 
-        public static void MovedContent(object sender, ContentEventArgs eventArgs)
+        public static void MovedContent(object sender, ContentEventArgs args)
         {
-            Runner.Run<IMovedContent>(e => e.MovedContent(sender, eventArgs));
+            EventRunner.Execute<IMovedContent>(e => e.MovedContent(sender, args));
         }
     }
 }

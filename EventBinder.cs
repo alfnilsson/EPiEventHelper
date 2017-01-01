@@ -1,44 +1,69 @@
 using EPiServer.Core;
+using EPiServer.ServiceLocation;
 using Toders.EPiEventHelper.EventHandlers;
 using Toders.EPiEventHelper.EventHandlers.Content;
+using Toders.EPiEventHelper.Events;
 
 namespace Toders.EPiEventHelper
 {
     public class EventBinder
     {
         private readonly IContentEvents _contentEvents;
+        private readonly Version _version;
+        private readonly ContentSave _contentSave;
+        private readonly ContentCreate _contentCreate;
+        private ContentCheckIn _contentCheckIn;
+        private ContentCheckOut _contentCheckOut;
 
-        public EventBinder(IContentEvents contentEvents)
+        public EventBinder(IContentEvents contentEvents, IEventRunner eventRunner)
         {
             this._contentEvents = contentEvents;
+            this._version = new Version(eventRunner);
+
+            this._contentCreate = new ContentCreate(eventRunner);
+            this._contentSave = new ContentSave(eventRunner);
+            this._contentCheckIn = new ContentCheckIn(eventRunner);
+            this._contentCheckOut = new ContentCheckOut(eventRunner);
         }
 
         public void BindEvents()
         {
-            BindContentEvents(_contentEvents);
-            BindContentLanguageEvents(_contentEvents);
-            BindContentVersionEvents(_contentEvents);
-            BindContentChildrenEvents(_contentEvents);
+            BindContentEvents(
+                _contentEvents,
+                _contentCreate,
+                _contentSave,
+                _contentCheckIn);
+            //BindContentLanguageEvents(_contentEvents, _eventRunner);
+            BindContentVersionEvents(_version, _contentEvents);
+            //BindContentChildrenEvents(_contentEvents, _eventRunner);
         }
 
         public void UnbindEvents()
         {
-            UnbindContentEvents(_contentEvents);
-            UnbindContentLanguageEvents(_contentEvents);
-            UnbindContentVersionEvents(_contentEvents);
-            UnbindContentChildrenEvents(_contentEvents);
+            UnbindContentEvents(
+                _contentEvents,
+                _contentCreate,
+                _contentSave,
+                _contentCheckIn);
+            //UnbindContentLanguageEvents(_contentEvents, _eventRunner);
+            UnbindContentVersionEvents(_version, _contentEvents);
+            //UnbindContentChildrenEvents(_contentEvents, _eventRunner);
         }
 
-        private static void BindContentEvents(IContentEvents contentEvents)
+        private static void BindContentEvents(
+            IContentEvents contentEvents,
+            ContentCreate contentCreate,
+            ContentSave contentSave,
+            ContentCheckIn contentCheckIn)
         {
-            contentEvents.CreatedContent += ContentCreate.CreatedContent;
-            contentEvents.CreatingContent += ContentCreate.CreatingContent;
+            contentEvents.CreatedContent += contentCreate.CreatedContent;
+            contentEvents.CreatingContent += contentCreate.CreatingContent;
 
-            contentEvents.SavingContent += ContentSave.SavingContent;
-            contentEvents.SavedContent += ContentSave.SavedContent;
+            contentEvents.SavingContent += contentSave.SavingContent;
+            contentEvents.SavedContent += contentSave.SavedContent;
 
-            contentEvents.CheckingInContent += ContentCheckIn.CheckingInContent;
-            contentEvents.CheckedInContent += ContentCheckIn.CheckedInContent;
+            contentEvents.CheckingInContent += contentCheckIn.CheckingInContent;
+            contentEvents.CheckedInContent += contentCheckIn.CheckedInContent;
 
             contentEvents.CheckingOutContent += ContentCheckOut.CheckingOutContent;
             contentEvents.CheckedOutContent += ContentCheckOut.CheckedOutContent;
@@ -69,38 +94,40 @@ namespace Toders.EPiEventHelper
             contentEvents.LoadedDefaultContent += DefaultContentLoad.LoadedDefaultContent;
         }
 
-        private static void BindContentLanguageEvents(IContentEvents contentEvents)
+        private static void BindContentLanguageEvents(IContentEvents contentEvents, IEventRunner eventRunner)
         {
-            contentEvents.CreatingContentLanguage += Language.CreatingContentLanguage;
-            contentEvents.CreatedContentLanguage += Language.CreatedContentLanguage;
+            Language language = new Language(eventRunner);
+            contentEvents.CreatingContentLanguage += language.CreatingContentLanguage;
+            contentEvents.CreatedContentLanguage += language.CreatedContentLanguage;
 
-            contentEvents.DeletedContentLanguage += Language.DeletedContentLanguage;
-            contentEvents.DeletingContentLanguage += Language.DeletingContentLanguage;
+            contentEvents.DeletingContentLanguage += language.DeletingContentLanguage;
+            contentEvents.DeletedContentLanguage += language.DeletedContentLanguage;
         }
 
-        private static void BindContentVersionEvents(IContentEvents contentEvents)
+        private static void BindContentVersionEvents(Version version, IContentEvents contentEvents)
         {
-            contentEvents.DeletingContentVersion += Version.DeletingContentVersion;
-            contentEvents.DeletedContentVersion += Version.DeletedContentVersion;
+            contentEvents.DeletingContentVersion += version.DeletingContentVersion;
+            contentEvents.DeletedContentVersion += version.DeletedContentVersion;
         }
 
-        private static void BindContentChildrenEvents(IContentEvents contentEvents)
+        private static void BindContentChildrenEvents(IContentEvents contentEvents, IEventRunner eventRunner)
         {
-            contentEvents.LoadingChildren += Children.LoadingChildren;
-            contentEvents.LoadedChildren += Children.LoadedChildren;
-            contentEvents.FailedLoadingChildren += Children.FailedLoadingChildren;
+            Children children = new Children(eventRunner);
+            contentEvents.LoadingChildren += children.LoadingChildren;
+            contentEvents.LoadedChildren += children.LoadedChildren;
+            contentEvents.FailedLoadingChildren += children.FailedLoadingChildren;
         }
 
-        private static void UnbindContentEvents(IContentEvents contentEvents)
+        private static void UnbindContentEvents(IContentEvents contentEvents, ContentCreate contentCreate, ContentSave contentSave, ContentCheckIn contentCheckIn)
         {
-            contentEvents.CreatedContent -= ContentCreate.CreatedContent;
-            contentEvents.CreatingContent -= ContentCreate.CreatingContent;
+            contentEvents.CreatedContent -= contentCreate.CreatedContent;
+            contentEvents.CreatingContent -= contentCreate.CreatingContent;
 
-            contentEvents.SavingContent -= ContentSave.SavingContent;
-            contentEvents.SavedContent -= ContentSave.SavedContent;
+            contentEvents.SavingContent -= contentSave.SavingContent;
+            contentEvents.SavedContent -= contentSave.SavedContent;
 
-            contentEvents.CheckingInContent -= ContentCheckIn.CheckingInContent;
-            contentEvents.CheckedInContent -= ContentCheckIn.CheckedInContent;
+            contentEvents.CheckingInContent -= contentCheckIn.CheckingInContent;
+            contentEvents.CheckedInContent -= contentCheckIn.CheckedInContent;
 
             contentEvents.CheckingOutContent -= ContentCheckOut.CheckingOutContent;
             contentEvents.CheckedOutContent -= ContentCheckOut.CheckedOutContent;
@@ -131,26 +158,28 @@ namespace Toders.EPiEventHelper
             contentEvents.LoadedDefaultContent -= DefaultContentLoad.LoadedDefaultContent;
         }
 
-        private static void UnbindContentLanguageEvents(IContentEvents contentEvents)
+        private static void UnbindContentLanguageEvents(IContentEvents contentEvents, IEventRunner eventRunner)
         {
-            contentEvents.CreatingContentLanguage -= Language.CreatingContentLanguage;
-            contentEvents.CreatedContentLanguage -= Language.CreatedContentLanguage;
+            Language language = new Language(eventRunner);
+            contentEvents.CreatingContentLanguage -= language.CreatingContentLanguage;
+            contentEvents.CreatedContentLanguage -= language.CreatedContentLanguage;
 
-            contentEvents.DeletedContentLanguage -= Language.DeletedContentLanguage;
-            contentEvents.DeletingContentLanguage -= Language.DeletingContentLanguage;
+            contentEvents.DeletedContentLanguage -= language.DeletedContentLanguage;
+            contentEvents.DeletingContentLanguage -= language.DeletingContentLanguage;
         }
 
-        private static void UnbindContentVersionEvents(IContentEvents contentEvents)
+        private static void UnbindContentVersionEvents(Version version, IContentEvents contentEvents)
         {
-            contentEvents.DeletingContentVersion -= Version.DeletingContentVersion;
-            contentEvents.DeletedContentVersion -= Version.DeletedContentVersion;
+            contentEvents.DeletingContentVersion -= version.DeletingContentVersion;
+            contentEvents.DeletedContentVersion -= version.DeletedContentVersion;
         }
 
-        private static void UnbindContentChildrenEvents(IContentEvents contentEvents)
+        private static void UnbindContentChildrenEvents(IContentEvents contentEvents, IEventRunner eventRunner)
         {
-            contentEvents.LoadingChildren -= Children.LoadingChildren;
-            contentEvents.LoadedChildren -= Children.LoadedChildren;
-            contentEvents.FailedLoadingChildren -= Children.FailedLoadingChildren;
+            Children children = new Children(eventRunner);
+            contentEvents.LoadingChildren -= children.LoadingChildren;
+            contentEvents.LoadedChildren -= children.LoadedChildren;
+            contentEvents.FailedLoadingChildren -= children.FailedLoadingChildren;
         }
     }
 }

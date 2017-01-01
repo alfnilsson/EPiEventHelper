@@ -2,6 +2,7 @@
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
+using Toders.EPiEventHelper.EventHandlers;
 
 namespace Toders.EPiEventHelper
 {
@@ -10,14 +11,14 @@ namespace Toders.EPiEventHelper
     {
         public void Initialize(InitializationEngine context)
         {
-            new EventBinder(ServiceLocator.Current.GetInstance<IContentEvents>()).BindEvents();
+            new EventBinder(ServiceLocator.Current.GetInstance<IContentEvents>(), ServiceLocator.Current.GetInstance<IEventRunner>()).BindEvents();
         }
 
         public void Preload(string[] parameters) { }
 
         public void Uninitialize(InitializationEngine context)
         {
-            new EventBinder(ServiceLocator.Current.GetInstance<IContentEvents>()).UnbindEvents();
+            new EventBinder(ServiceLocator.Current.GetInstance<IContentEvents>(), ServiceLocator.Current.GetInstance<IEventRunner>()).UnbindEvents();
         }
     }
 }

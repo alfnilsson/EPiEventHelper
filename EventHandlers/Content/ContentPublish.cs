@@ -5,14 +5,14 @@ namespace Toders.EPiEventHelper.EventHandlers.Content
 {
     public static class ContentPublish
     {
-        public static void PublishingContent(object sender, ContentEventArgs eventArgs)
+        public static void PublishingContent(object sender, ContentEventArgs args)
         {
-            Runner.Run<IPublishingContent>(e => e.PublishingContent(sender, eventArgs));
+            EventRunner.Execute<IPublishingContent>(e => e.PublishingContent(sender, args));
         }
 
-        public static void PublishedContent(object sender, ContentEventArgs eventArgs)
+        public static void PublishedContent(object sender, ContentEventArgs args)
         {
-            Runner.Run<IPublishedContent>(e => e.PublishedContent(sender, eventArgs));
+            EventRunner.Execute<IPublishedContent>(e => e.PublishedContent(sender, args));
         }
     }
 }

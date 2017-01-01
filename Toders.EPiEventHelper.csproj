@@ -177,7 +177,7 @@
     <Compile Include="EventHandlers\Version.cs" />
     <Compile Include="EventHandlers\Content\ContentSchedule.cs" />
     <Compile Include="EventInitializationModule.cs" />
-    <Compile Include="EventHandlers\Runner.cs" />
+    <Compile Include="EventHandlers\EventRunner.cs" />
     <Compile Include="Events\ICheckedInContent.cs" />
     <Compile Include="Events\ICheckedInPage.cs" />
     <Compile Include="Events\ICheckingInContent.cs" />

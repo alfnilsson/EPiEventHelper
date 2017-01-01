@@ -5,14 +5,14 @@ namespace Toders.EPiEventHelper.EventHandlers.Content
 {
     public static class DefaultContentLoad
     {
-        public static void LoadingDefaultContent(object sender, ContentEventArgs eventArgs)
+        public static void LoadingDefaultContent(object sender, ContentEventArgs args)
         {
-            Runner.Run<ILoadingDefaultContent>(e => e.LoadingDefaultContent(sender, eventArgs));
+            EventRunner.Execute<ILoadingDefaultContent>(e => e.LoadingDefaultContent(sender, args));
         }
 
-        public static void LoadedDefaultContent(object sender, ContentEventArgs eventArgs)
+        public static void LoadedDefaultContent(object sender, ContentEventArgs args)
         {
-            Runner.Run<ILoadedDefaultContent>(e => e.LoadedDefaultContent(sender, eventArgs));
+            EventRunner.Execute<ILoadedDefaultContent>(e => e.LoadedDefaultContent(sender, args));
         }
     }
 }

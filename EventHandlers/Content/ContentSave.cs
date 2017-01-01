@@ -3,16 +3,23 @@ using Toders.EPiEventHelper.Events;
 
 namespace Toders.EPiEventHelper.EventHandlers.Content
 {
-    public static class ContentSave
+    public class ContentSave
     {
-        public static void SavingContent(object sender, ContentEventArgs eventArgs)
+        private readonly IEventRunner _eventRunner;
+
+        public ContentSave(IEventRunner eventRunner)
         {
-            Runner.Run<ISavingContent>(e => e.SavingContent(sender, eventArgs));
+            _eventRunner = eventRunner;
         }
 
-        public static void SavedContent(object sender, ContentEventArgs eventArgs)
+        public void SavingContent(object sender, ContentEventArgs args)
         {
-            Runner.Run<ISavedContent>(e => e.SavedContent(sender, eventArgs));
+            _eventRunner.Run<ISavingContent>(e => e.SavingContent(sender, args));
+        }
+
+        public void SavedContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<ISavedContent>(e => e.SavedContent(sender, args));
         }
     }
 }

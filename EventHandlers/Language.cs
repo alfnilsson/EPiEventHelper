@@ -3,26 +3,33 @@ using Toders.EPiEventHelper.Events;
 
 namespace Toders.EPiEventHelper.EventHandlers
 {
-    public static class Language
+    public class Language
     {
-        public static void CreatingContentLanguage(object sender, ContentEventArgs eventArgs)
+        private readonly IEventRunner _eventRunner;
+
+        public Language(IEventRunner eventRunner)
         {
-            Runner.Run<ICreatingContentLanguage>(e => e.CreatingContentLanguage(sender, eventArgs));
+            _eventRunner = eventRunner;
         }
 
-        public static void CreatedContentLanguage(object sender, ContentEventArgs eventArgs)
+        public void CreatingContentLanguage(object sender, ContentEventArgs args)
         {
-            Runner.Run<ICreatedContentLanguage>(e => e.CreatedContentLanguage(sender, eventArgs));
+            _eventRunner.Run<ICreatingContentLanguage>(e => e.CreatingContentLanguage(sender, args));
         }
 
-        public static void DeletingContentLanguage(object sender, ContentEventArgs eventArgs)
+        public void CreatedContentLanguage(object sender, ContentEventArgs args)
         {
-            Runner.Run<IDeletingContentLanguage>(e => e.DeletingContentLanguage(sender, eventArgs));
+            _eventRunner.Run<ICreatedContentLanguage>(e => e.CreatedContentLanguage(sender, args));
         }
 
-        public static void DeletedContentLanguage(object sender, ContentEventArgs eventArgs)
+        public void DeletingContentLanguage(object sender, ContentEventArgs args)
         {
-            Runner.Run<IDeletedContentLanguage>(e => e.DeletedContentLanguage(sender, eventArgs));
+            _eventRunner.Run<IDeletingContentLanguage>(e => e.DeletingContentLanguage(sender, args));
+        }
+
+        public void DeletedContentLanguage(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<IDeletedContentLanguage>(e => e.DeletedContentLanguage(sender, args));
         }
     }
 }

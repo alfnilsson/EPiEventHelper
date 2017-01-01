@@ -5,14 +5,14 @@ namespace Toders.EPiEventHelper.EventHandlers.Content
 {
     public static class ContentDelete
     {
-        public static void DeletingContent(object sender, DeleteContentEventArgs eventArgs)
+        public static void DeletingContent(object sender, DeleteContentEventArgs args)
         {
-            Runner.Run<IDeletingContent>(e => e.DeletingContent(sender, eventArgs));
+            EventRunner.Execute<IDeletingContent>(e => e.DeletingContent(sender, args));
         }
 
-        public static void DeletedContent(object sender, DeleteContentEventArgs eventArgs)
+        public static void DeletedContent(object sender, DeleteContentEventArgs args)
         {
-            Runner.Run<IDeletedContent>(e => e.DeletedContent(sender, eventArgs));
+            EventRunner.Execute<IDeletedContent>(e => e.DeletedContent(sender, args));
         }
     }
 }

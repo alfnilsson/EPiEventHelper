@@ -3,16 +3,23 @@ using Toders.EPiEventHelper.Events;
 
 namespace Toders.EPiEventHelper.EventHandlers.Content
 {
-    public static class ContentCheckIn
+    public class ContentCheckIn
     {
-        public static void CheckingInContent(object sender, ContentEventArgs eventArgs)
+        private readonly IEventRunner _eventRunner;
+
+        public ContentCheckIn(IEventRunner eventRunner)
         {
-            Runner.Run<ICheckingInContent>(e => e.CheckingInContent(sender, eventArgs));
+            this._eventRunner = eventRunner;
         }
 
-        public static void CheckedInContent(object sender, ContentEventArgs eventArgs)
+        public void CheckingInContent(object sender, ContentEventArgs args)
         {
-            Runner.Run<ICheckedInContent>(e => e.CheckedInContent(sender, eventArgs));
+            _eventRunner.Run<ICheckingInContent>(e => e.CheckingInContent(sender, args));
+        }
+
+        public void CheckedInContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<ICheckedInContent>(e => e.CheckedInContent(sender, args));
         }
     }
 }

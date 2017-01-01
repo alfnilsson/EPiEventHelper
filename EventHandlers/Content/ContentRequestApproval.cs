@@ -5,14 +5,14 @@ namespace Toders.EPiEventHelper.EventHandlers.Content
 {
     public static class ContentRequestApproval
     {
-        public static void RequestingApproval(object sender, ContentEventArgs eventArgs)
+        public static void RequestingApproval(object sender, ContentEventArgs args)
         {
-            Runner.Run<IRequestingApproval>(e => e.RequestingApproval(sender, eventArgs));
+            EventRunner.Execute<IRequestingApproval>(e => e.RequestingApproval(sender, args));
         }
 
-        public static void RequestedApproval(object sender, ContentEventArgs eventArgs)
+        public static void RequestedApproval(object sender, ContentEventArgs args)
         {
-            Runner.Run<IRequestedApproval>(e => e.RequestedApproval(sender, eventArgs));
+            EventRunner.Execute<IRequestedApproval>(e => e.RequestedApproval(sender, args));
         }
     }
 }

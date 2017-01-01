@@ -5,19 +5,19 @@ namespace Toders.EPiEventHelper.EventHandlers.Content
 {
     public static class ContentLoad
     {
-        public static void LoadingContent(object sender, ContentEventArgs eventArgs)
+        public static void LoadingContent(object sender, ContentEventArgs args)
         {
-            Runner.Run<ILoadingContent>(e => e.LoadingContent(sender, eventArgs));
+            EventRunner.Execute<ILoadingContent>(e => e.LoadingContent(sender, args));
         }
 
-        public static void LoadedContent(object sender, ContentEventArgs eventArgs)
+        public static void LoadedContent(object sender, ContentEventArgs args)
         {
-            Runner.Run<ILoadedContent>(e => e.LoadedContent(sender, eventArgs));
+            EventRunner.Execute<ILoadedContent>(e => e.LoadedContent(sender, args));
         }
 
-        public static void FailedLoadingContent(object sender, ContentEventArgs eventArgs)
+        public static void FailedLoadingContent(object sender, ContentEventArgs args)
         {
-            Runner.Run<IFailedLoadingContent>(e => e.FailedLoadingContent(sender, eventArgs));
+            EventRunner.Execute<IFailedLoadingContent>(e => e.FailedLoadingContent(sender, args));
         }
     }
 }

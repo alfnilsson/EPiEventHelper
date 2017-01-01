@@ -4,6 +4,6 @@ namespace Toders.EPiEventHelper.Events
 {
     public interface IRequestedApproval
     {
-        void RequestedApproval(object sender, ContentEventArgs eventArgs);
+        void RequestedApproval(object sender, ContentEventArgs args);
     }
 }

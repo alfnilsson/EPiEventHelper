@@ -3,16 +3,23 @@ using Toders.EPiEventHelper.Events;
 
 namespace Toders.EPiEventHelper.EventHandlers
 {
-    public static class Version
+    public class Version
     {
-        public static void DeletingContentVersion(object sender, ContentEventArgs eventArgs)
+        private readonly IEventRunner _eventRunner;
+
+        public Version(IEventRunner eventRunner)
         {
-            Runner.Run<IDeletingContentVersion>(e => e.DeletingContentVersion(sender, eventArgs));
+            _eventRunner = eventRunner;
         }
 
-        public static void DeletedContentVersion(object sender, ContentEventArgs eventArgs)
+        public void DeletingContentVersion(object sender, ContentEventArgs args)
         {
-            Runner.Run<IDeletedContentVersion>(e => e.DeletedContentVersion(sender, eventArgs));
+            _eventRunner.Run<IDeletingContentVersion>(e => e.DeletingContentVersion(sender, args));
+        }
+
+        public void DeletedContentVersion(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<IDeletedContentVersion>(e => e.DeletedContentVersion(sender, args));
         }
     }
 }
