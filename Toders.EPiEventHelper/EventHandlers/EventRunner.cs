@@ -30,11 +30,5 @@ namespace Toders.EPiEventHelper.EventHandlers
                 action(e);
             }
         }
-
-        public static void Execute<TEvent>(Action<TEvent> action)
-        {
-            var runner = new EventRunner(ServiceLocator.Current);
-            runner.Run(action);
-        }
     }
 }
