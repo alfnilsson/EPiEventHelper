@@ -1,4 +1,4 @@
-﻿using EPiServer;
+using EPiServer;
 using EPiServer.Core;
 using Toders.EPiEventHelper.Events;
 
