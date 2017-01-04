@@ -153,18 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventBinder.cs" />
-    <Compile Include="EventHandlers\Children.cs" />
-    <Compile Include="EventHandlers\Content\ContentCheckIn.cs" />
-    <Compile Include="EventHandlers\Content\ContentCheckOut.cs" />
-    <Compile Include="EventHandlers\Content\ContentCreate.cs" />
-    <Compile Include="EventHandlers\Content\ContentDelete.cs" />
-    <Compile Include="EventHandlers\Content\ContentLoad.cs" />
-    <Compile Include="EventHandlers\Content\ContentMove.cs" />
-    <Compile Include="EventHandlers\Content\ContentPublish.cs" />
-    <Compile Include="EventHandlers\Content\ContentReject.cs" />
-    <Compile Include="EventHandlers\Content\ContentRequestApproval.cs" />
-    <Compile Include="EventHandlers\Content\ContentSave.cs" />
-    <Compile Include="EventHandlers\Content\DefaultContentLoad.cs" />
+    <Compile Include="EventRunner.cs" />
     <Compile Include="Events\IRequestedApproval.cs" />
     <Compile Include="Events\IRequestingApproval.cs" />
     <Compile Include="Events\IRejectedContent.cs" />
@@ -173,11 +162,7 @@
     <Compile Include="Events\ICheckingOutContent.cs" />
     <Compile Include="Events\IScheduledContent.cs" />
     <Compile Include="Events\ISchedulingContent.cs" />
-    <Compile Include="EventHandlers\Language.cs" />
-    <Compile Include="EventHandlers\Version.cs" />
-    <Compile Include="EventHandlers\Content\ContentSchedule.cs" />
     <Compile Include="EventInitializationModule.cs" />
-    <Compile Include="EventHandlers\EventRunner.cs" />
     <Compile Include="Events\ICheckedInContent.cs" />
     <Compile Include="Events\ICheckingInContent.cs" />
     <Compile Include="Events\ICreatedContent.cs" />
@@ -204,12 +189,14 @@
     <Compile Include="Events\ILoadingChildren.cs" />
     <Compile Include="Events\ICreatedContentLanguage.cs" />
     <Compile Include="Events\ICreatingContentLanguage.cs" />
+    <Compile Include="Events\ContentEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

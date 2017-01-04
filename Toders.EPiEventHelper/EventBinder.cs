@@ -1,214 +1,316 @@
+using EPiServer;
 using EPiServer.Core;
-using Toders.EPiEventHelper.EventHandlers;
-using Toders.EPiEventHelper.EventHandlers.Content;
+using Toders.EPiEventHelper.Events;
 
 namespace Toders.EPiEventHelper
 {
     public class EventBinder
     {
         private readonly IContentEvents _contentEvents;
-        private readonly Version _version;
-        private readonly ContentSave _contentSave;
-        private readonly ContentCreate _contentCreate;
-        private readonly ContentCheckIn _contentCheckIn;
-        private readonly ContentCheckOut _contentCheckOut;
-        private readonly ContentReject _contentReject;
-        private readonly ContentRequestApproval _contentRequestApproval;
-        private readonly ContentPublish _contentPublish;
-        private readonly ContentMove _contentMove;
-        private readonly ContentDelete _contentDelete;
-        private readonly ContentLoad _contentLoad;
-        private readonly ContentSchedule _contentSchedule;
-        private readonly DefaultContentLoad _defaultContentLoad;
-        private readonly Language _language;
-        private Children _children;
+
+        private readonly IEventRunner _eventRunner;
 
         public EventBinder(IContentEvents contentEvents, IEventRunner eventRunner)
         {
             _contentEvents = contentEvents;
 
-            _version = new Version(eventRunner);
-            _language = new Language(eventRunner);
-            _children = new Children(eventRunner);
-
-            _contentCreate = new ContentCreate(eventRunner);
-            _contentSave = new ContentSave(eventRunner);
-            _contentCheckIn = new ContentCheckIn(eventRunner);
-            _contentCheckOut = new ContentCheckOut(eventRunner);
-            _contentReject = new ContentReject(eventRunner);
-            _contentRequestApproval = new ContentRequestApproval(eventRunner);
-            _contentPublish = new ContentPublish(eventRunner);
-            _contentMove = new ContentMove(eventRunner);
-            _contentDelete = new ContentDelete(eventRunner);
-            _contentLoad = new ContentLoad(eventRunner);
-            _contentSchedule = new ContentSchedule(eventRunner);
-            _defaultContentLoad = new DefaultContentLoad(eventRunner);
+            _eventRunner = eventRunner;
         }
 
         public void BindEvents()
         {
-            BindContentEvents(
-                _contentEvents,
-                _contentCreate,
-                _contentSave,
-                _contentCheckIn,
-                _contentCheckOut,
-                _contentReject,
-                _contentRequestApproval,
-                _contentPublish,
-                _contentMove,
-                _contentDelete,
-                _contentLoad,
-                _contentSchedule,
-                _defaultContentLoad);
-            BindContentLanguageEvents(_contentEvents, _language);
-            BindContentVersionEvents(_contentEvents, _version);
-            BindContentChildrenEvents(_contentEvents, _children);
+            _contentEvents.CreatedContent += CreatedContent;
+            _contentEvents.CreatingContent += CreatingContent;
+
+            _contentEvents.SavingContent += SavingContent;
+            _contentEvents.SavedContent += SavedContent;
+
+            _contentEvents.CheckingInContent += CheckingInContent;
+            _contentEvents.CheckedInContent += CheckedInContent;
+
+            _contentEvents.CheckingOutContent += CheckingOutContent;
+            _contentEvents.CheckedOutContent += CheckedOutContent;
+
+            _contentEvents.RejectingContent += RejectingContent;
+            _contentEvents.RejectedContent += RejectedContent;
+
+            _contentEvents.RequestingApproval += RequestingApproval;
+            _contentEvents.RequestedApproval += RequestedApproval;
+
+            _contentEvents.PublishingContent += PublishingContent;
+            _contentEvents.PublishedContent += PublishedContent;
+
+            _contentEvents.MovingContent += MovingContent;
+            _contentEvents.MovedContent += MovedContent;
+
+            _contentEvents.DeletingContent += DeletingContent;
+            _contentEvents.DeletedContent += DeletedContent;
+
+            _contentEvents.LoadingContent += LoadingContent;
+            _contentEvents.LoadedContent += LoadedContent;
+            _contentEvents.FailedLoadingContent += FailedLoadingContent;
+
+            _contentEvents.SchedulingContent += SchedulingContent;
+            _contentEvents.ScheduledContent += ScheduledContent;
+
+            _contentEvents.LoadingDefaultContent += LoadingDefaultContent;
+            _contentEvents.LoadedDefaultContent += LoadedDefaultContent;
+
+            _contentEvents.CreatingContentLanguage += CreatingContentLanguage;
+            _contentEvents.CreatedContentLanguage += CreatedContentLanguage;
+
+            _contentEvents.DeletingContentLanguage += DeletingContentLanguage;
+            _contentEvents.DeletedContentLanguage += DeletedContentLanguage;
+
+            _contentEvents.DeletingContentVersion += DeletingContentVersion;
+            _contentEvents.DeletedContentVersion += DeletedContentVersion;
+
+            _contentEvents.LoadingChildren += LoadingChildren;
+            _contentEvents.LoadedChildren += LoadedChildren;
+            _contentEvents.FailedLoadingChildren += FailedLoadingChildren;
         }
 
         public void UnbindEvents()
         {
-            UnbindContentEvents(
-                _contentEvents,
-                _contentCreate,
-                _contentSave,
-                _contentCheckIn,
-                _contentCheckOut,
-                _contentReject,
-                _contentRequestApproval,
-                _contentPublish,
-                _contentMove,
-                _contentDelete,
-                _contentLoad,
-                _contentSchedule,
-                _defaultContentLoad);
-            UnbindContentLanguageEvents(_contentEvents, _language);
-            UnbindContentVersionEvents(_version, _contentEvents);
-            UnbindContentChildrenEvents(_contentEvents, _children);
+            _contentEvents.CreatedContent -= CreatedContent;
+            _contentEvents.CreatingContent -= CreatingContent;
+
+            _contentEvents.SavingContent -= SavingContent;
+            _contentEvents.SavedContent -= SavedContent;
+
+            _contentEvents.CheckingInContent -= CheckingInContent;
+            _contentEvents.CheckedInContent -= CheckedInContent;
+
+            _contentEvents.CheckingOutContent -= CheckingOutContent;
+            _contentEvents.CheckedOutContent -= CheckedOutContent;
+
+            _contentEvents.RejectingContent -= RejectingContent;
+            _contentEvents.RejectedContent -= RejectedContent;
+
+            _contentEvents.RequestingApproval -= RequestingApproval;
+            _contentEvents.RequestedApproval -= RequestedApproval;
+
+            _contentEvents.PublishingContent -= PublishingContent;
+            _contentEvents.PublishedContent -= PublishedContent;
+
+            _contentEvents.MovingContent -= MovingContent;
+            _contentEvents.MovedContent -= MovedContent;
+
+            _contentEvents.DeletingContent -= DeletingContent;
+            _contentEvents.DeletedContent -= DeletedContent;
+
+            _contentEvents.LoadingContent -= LoadingContent;
+            _contentEvents.LoadedContent -= LoadedContent;
+            _contentEvents.FailedLoadingContent -= FailedLoadingContent;
+
+            _contentEvents.SchedulingContent -= SchedulingContent;
+            _contentEvents.ScheduledContent -= ScheduledContent;
+
+            _contentEvents.LoadingDefaultContent -= LoadingDefaultContent;
+            _contentEvents.LoadedDefaultContent -= LoadedDefaultContent;
+
+            _contentEvents.CreatingContentLanguage -= CreatingContentLanguage;
+            _contentEvents.CreatedContentLanguage -= CreatedContentLanguage;
+
+            _contentEvents.DeletingContentLanguage -= DeletingContentLanguage;
+            _contentEvents.DeletedContentLanguage -= DeletedContentLanguage;
+
+            _contentEvents.DeletingContentVersion -= DeletingContentVersion;
+            _contentEvents.DeletedContentVersion -= DeletedContentVersion;
+
+            _contentEvents.LoadingChildren -= LoadingChildren;
+            _contentEvents.LoadedChildren -= LoadedChildren;
+            _contentEvents.FailedLoadingChildren -= FailedLoadingChildren;
         }
 
-        private static void BindContentEvents(IContentEvents contentEvents, ContentCreate contentCreate, ContentSave contentSave, ContentCheckIn contentCheckIn, ContentCheckOut contentCheckOut, ContentReject contentReject, ContentRequestApproval contentRequestApproval, ContentPublish contentPublish, ContentMove contentMove, ContentDelete contentDelete, ContentLoad contentLoad, ContentSchedule contentSchedule, DefaultContentLoad defaultContentLoad)
+        #region [ Content ]
+
+        public void CheckingInContent(object sender, ContentEventArgs args)
         {
-            contentEvents.CreatedContent += contentCreate.CreatedContent;
-            contentEvents.CreatingContent += contentCreate.CreatingContent;
-
-            contentEvents.SavingContent += contentSave.SavingContent;
-            contentEvents.SavedContent += contentSave.SavedContent;
-
-            contentEvents.CheckingInContent += contentCheckIn.CheckingInContent;
-            contentEvents.CheckedInContent += contentCheckIn.CheckedInContent;
-
-            contentEvents.CheckingOutContent += contentCheckOut.CheckingOutContent;
-            contentEvents.CheckedOutContent += contentCheckOut.CheckedOutContent;
-
-            contentEvents.RejectingContent += contentReject.RejectingContent;
-            contentEvents.RejectedContent += contentReject.RejectedContent;
-
-            contentEvents.RequestingApproval += contentRequestApproval.RequestingApproval;
-            contentEvents.RequestedApproval += contentRequestApproval.RequestedApproval;
-
-            contentEvents.PublishingContent += contentPublish.PublishingContent;
-            contentEvents.PublishedContent += contentPublish.PublishedContent;
-
-            contentEvents.MovingContent += contentMove.MovingContent;
-            contentEvents.MovedContent += contentMove.MovedContent;
-
-            contentEvents.DeletingContent += contentDelete.DeletingContent;
-            contentEvents.DeletedContent += contentDelete.DeletedContent;
-
-            contentEvents.LoadingContent += contentLoad.LoadingContent;
-            contentEvents.LoadedContent += contentLoad.LoadedContent;
-            contentEvents.FailedLoadingContent += contentLoad.FailedLoadingContent;
-
-            contentEvents.SchedulingContent += contentSchedule.SchedulingContent;
-            contentEvents.ScheduledContent += contentSchedule.ScheduledContent;
-
-            contentEvents.LoadingDefaultContent += defaultContentLoad.LoadingDefaultContent;
-            contentEvents.LoadedDefaultContent += defaultContentLoad.LoadedDefaultContent;
+            _eventRunner.Run<ICheckingInContent>(e => e.CheckingInContent(sender, args));
         }
 
-        private static void BindContentLanguageEvents(IContentEvents contentEvents, Language language)
+        public void CheckedInContent(object sender, ContentEventArgs args)
         {
-            contentEvents.CreatingContentLanguage += language.CreatingContentLanguage;
-            contentEvents.CreatedContentLanguage += language.CreatedContentLanguage;
-
-            contentEvents.DeletingContentLanguage += language.DeletingContentLanguage;
-            contentEvents.DeletedContentLanguage += language.DeletedContentLanguage;
+            _eventRunner.Run<ICheckedInContent>(e => e.CheckedInContent(sender, args));
         }
 
-        private static void BindContentVersionEvents(IContentEvents contentEvents, Version version)
+        public void CheckingOutContent(object sender, ContentEventArgs args)
         {
-            contentEvents.DeletingContentVersion += version.DeletingContentVersion;
-            contentEvents.DeletedContentVersion += version.DeletedContentVersion;
+            _eventRunner.Run<ICheckingOutContent>(e => e.CheckingOutContent(sender, args));
         }
 
-        private static void BindContentChildrenEvents(IContentEvents contentEvents, Children children)
+        public void CheckedOutContent(object sender, ContentEventArgs args)
         {
-            contentEvents.LoadingChildren += children.LoadingChildren;
-            contentEvents.LoadedChildren += children.LoadedChildren;
-            contentEvents.FailedLoadingChildren += children.FailedLoadingChildren;
+            _eventRunner.Run<ICheckedOutContent>(e => e.CheckedOutContent(sender, args));
         }
 
-        private static void UnbindContentEvents(IContentEvents contentEvents, ContentCreate contentCreate, ContentSave contentSave, ContentCheckIn contentCheckIn, ContentCheckOut contentCheckOut, ContentReject contentReject, ContentRequestApproval contentRequestApproval, ContentPublish contentPublish, ContentMove contentMove, ContentDelete contentDelete, ContentLoad contentLoad, ContentSchedule contentSchedule, DefaultContentLoad defaultContentLoad)
+        public void CreatingContent(object sender, ContentEventArgs args)
         {
-            contentEvents.CreatedContent -= contentCreate.CreatedContent;
-            contentEvents.CreatingContent -= contentCreate.CreatingContent;
-
-            contentEvents.SavingContent -= contentSave.SavingContent;
-            contentEvents.SavedContent -= contentSave.SavedContent;
-
-            contentEvents.CheckingInContent -= contentCheckIn.CheckingInContent;
-            contentEvents.CheckedInContent -= contentCheckIn.CheckedInContent;
-
-            contentEvents.CheckingOutContent -= contentCheckOut.CheckingOutContent;
-            contentEvents.CheckedOutContent -= contentCheckOut.CheckedOutContent;
-
-            contentEvents.RejectingContent -= contentReject.RejectingContent;
-            contentEvents.RejectedContent -= contentReject.RejectedContent;
-
-            contentEvents.RequestingApproval -= contentRequestApproval.RequestingApproval;
-            contentEvents.RequestedApproval -= contentRequestApproval.RequestedApproval;
-
-            contentEvents.PublishingContent -= contentPublish.PublishingContent;
-            contentEvents.PublishedContent -= contentPublish.PublishedContent;
-
-            contentEvents.MovingContent -= contentMove.MovingContent;
-            contentEvents.MovedContent -= contentMove.MovedContent;
-
-            contentEvents.DeletingContent -= contentDelete.DeletingContent;
-            contentEvents.DeletedContent -= contentDelete.DeletedContent;
-
-            contentEvents.LoadingContent -= contentLoad.LoadingContent;
-            contentEvents.LoadedContent -= contentLoad.LoadedContent;
-            contentEvents.FailedLoadingContent -= contentLoad.FailedLoadingContent;
-
-            contentEvents.SchedulingContent -= contentSchedule.SchedulingContent;
-            contentEvents.ScheduledContent -= contentSchedule.ScheduledContent;
-
-            contentEvents.LoadingDefaultContent -= defaultContentLoad.LoadingDefaultContent;
-            contentEvents.LoadedDefaultContent -= defaultContentLoad.LoadedDefaultContent;
+            _eventRunner.Run<ICreatingContent>(e => e.CreatingContent(sender, args));
         }
 
-        private static void UnbindContentLanguageEvents(IContentEvents contentEvents, Language language)
+        public void CreatedContent(object sender, ContentEventArgs args)
         {
-            contentEvents.CreatingContentLanguage -= language.CreatingContentLanguage;
-            contentEvents.CreatedContentLanguage -= language.CreatedContentLanguage;
-
-            contentEvents.DeletedContentLanguage -= language.DeletedContentLanguage;
-            contentEvents.DeletingContentLanguage -= language.DeletingContentLanguage;
+            _eventRunner.Run<ICreatedContent>(e => e.CreatedContent(sender, args));
         }
 
-        private static void UnbindContentVersionEvents(Version version, IContentEvents contentEvents)
+        public void DeletingContent(object sender, DeleteContentEventArgs args)
         {
-            contentEvents.DeletingContentVersion -= version.DeletingContentVersion;
-            contentEvents.DeletedContentVersion -= version.DeletedContentVersion;
+            _eventRunner.Run<IDeletingContent>(e => e.DeletingContent(sender, args));
         }
 
-        private static void UnbindContentChildrenEvents(IContentEvents contentEvents, Children children)
+        public void DeletedContent(object sender, DeleteContentEventArgs args)
         {
-            contentEvents.LoadingChildren -= children.LoadingChildren;
-            contentEvents.LoadedChildren -= children.LoadedChildren;
-            contentEvents.FailedLoadingChildren -= children.FailedLoadingChildren;
+            _eventRunner.Run<IDeletedContent>(e => e.DeletedContent(sender, args));
         }
+
+        public void LoadingContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<ILoadingContent>(e => e.LoadingContent(sender, args));
+        }
+
+        public void LoadedContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<ILoadedContent>(e => e.LoadedContent(sender, args));
+        }
+
+        public void FailedLoadingContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<IFailedLoadingContent>(e => e.FailedLoadingContent(sender, args));
+        }
+
+        public void MovingContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<IMovingContent>(e => e.MovingContent(sender, args));
+        }
+
+        public void MovedContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<IMovedContent>(e => e.MovedContent(sender, args));
+        }
+
+        public void PublishingContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<IPublishingContent>(e => e.PublishingContent(sender, args));
+        }
+
+        public void PublishedContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<IPublishedContent>(e => e.PublishedContent(sender, args));
+        }
+
+        public void RejectingContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<IRejectingContent>(e => e.RejectingContent(sender, args));
+        }
+
+        public void RejectedContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<IRejectedContent>(e => e.RejectedContent(sender, args));
+        }
+
+        public void RequestingApproval(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<IRequestingApproval>(e => e.RequestingApproval(sender, args));
+        }
+
+        public void RequestedApproval(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<IRequestedApproval>(e => e.RequestedApproval(sender, args));
+        }
+
+        public void SavingContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<ISavingContent>(e => e.SavingContent(sender, args));
+        }
+
+        public void SavedContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<ISavedContent>(e => e.SavedContent(sender, args));
+        }
+
+        public void SchedulingContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<ISchedulingContent>(e => e.SchedulingContent(sender, args));
+        }
+
+        public void ScheduledContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<IScheduledContent>(e => e.ScheduledContent(sender, args));
+        }
+
+        #endregion
+
+        #region [ Default Content ]
+
+        public void LoadingDefaultContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<ILoadingDefaultContent>(e => e.LoadingDefaultContent(sender, args));
+        }
+
+        public void LoadedDefaultContent(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<ILoadedDefaultContent>(e => e.LoadedDefaultContent(sender, args));
+        }
+
+        #endregion
+
+        #region [ Children ]
+
+        public void LoadingChildren(object sender, ChildrenEventArgs args)
+        {
+            _eventRunner.Run<ILoadingChildren>(e => e.LoadingChildren(sender, args));
+        }
+
+        public void LoadedChildren(object sender, ChildrenEventArgs args)
+        {
+            _eventRunner.Run<ILoadedChildren>(e => e.LoadedChildren(sender, args));
+        }
+
+        public void FailedLoadingChildren(object sender, ChildrenEventArgs args)
+        {
+            _eventRunner.Run<IFailedLoadingChildren>(e => e.FailedLoadingChildren(sender, args));
+        }
+
+        #endregion
+
+        #region [ Content Language ]
+
+        public void CreatingContentLanguage(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<ICreatingContentLanguage>(e => e.CreatingContentLanguage(sender, args));
+        }
+
+        public void CreatedContentLanguage(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<ICreatedContentLanguage>(e => e.CreatedContentLanguage(sender, args));
+        }
+
+        public void DeletingContentLanguage(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<IDeletingContentLanguage>(e => e.DeletingContentLanguage(sender, args));
+        }
+
+        public void DeletedContentLanguage(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<IDeletedContentLanguage>(e => e.DeletedContentLanguage(sender, args));
+        }
+
+        #endregion
+
+        #region [ Content Version ]
+
+        public void DeletingContentVersion(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<IDeletingContentVersion>(e => e.DeletingContentVersion(sender, args));
+        }
+
+        public void DeletedContentVersion(object sender, ContentEventArgs args)
+        {
+            _eventRunner.Run<IDeletedContentVersion>(e => e.DeletedContentVersion(sender, args));
+        }
+
+        #endregion
     }
 }

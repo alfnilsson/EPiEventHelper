@@ -9,7 +9,6 @@ using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Toders.EPiEventHelper.EventHandlers;
 using Toders.EPiEventHelper.Events;
 
 namespace Toders.EPiEventHelper.Tests
@@ -26,8 +25,33 @@ namespace Toders.EPiEventHelper.Tests
             foreach (var eventInfo in events)
             {
                 Debug.WriteLine(eventInfo.Name);
-                var eventHandler = Type.GetType("Toders.EPiEventHelper.Events.I" + eventInfo.Name + ", Toders.EPiEventHelper");
-                Assert.IsNotNull(eventHandler);
+                Type eventHandlerType = Type.GetType("Toders.EPiEventHelper.Events.I" + eventInfo.Name + ", Toders.EPiEventHelper");
+                Assert.IsNotNull(eventHandlerType);
+            }
+        }
+
+        [TestMethod]
+        public void ThereShouldBeATypedForEachContentEvent()
+        {
+            var type = typeof(IContentEvents);
+            var events = type.GetEvents();
+
+            foreach (var eventInfo in events)
+            {
+                Type eventHandlerType = Type.GetType("Toders.EPiEventHelper.Events.I" + eventInfo.Name + ", Toders.EPiEventHelper");
+                if (eventHandlerType == null
+                    || eventHandlerType
+                        .GetMethods()
+                        .First()
+                        .GetParameters()
+                        .Any(parameter => parameter.ParameterType == typeof (ContentEventArgs)) == false)
+                {
+                    continue;
+                }
+
+                Type typedEventHandlerType = Type.GetType("Toders.EPiEventHelper.Events." + eventInfo.Name + "Base`1, Toders.EPiEventHelper");
+                Assert.IsNotNull(typedEventHandlerType);
+                Debug.WriteLine(eventHandlerType.Name + " = " + typedEventHandlerType.Name);
             }
         }
 

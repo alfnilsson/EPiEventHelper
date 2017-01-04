@@ -2,7 +2,6 @@
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
-using Toders.EPiEventHelper.EventHandlers;
 
 namespace Toders.EPiEventHelper
 {

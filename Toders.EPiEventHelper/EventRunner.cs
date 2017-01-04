@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using EPiServer.ServiceLocation;
 
-namespace Toders.EPiEventHelper.EventHandlers
+namespace Toders.EPiEventHelper
 {
     public interface IEventRunner
     {
