@@ -3,7 +3,7 @@ using EPiServer;
 using EPiServer.Core;
 using EPiServer.Security;
 
-namespace Toders.EPiEventHelper.Events
+namespace Toders.EPiEventHelper.TypedEvents
 {
     public abstract class TypedEventBase<TContentType>
         where TContentType : IContent

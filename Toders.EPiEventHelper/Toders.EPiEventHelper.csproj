@@ -189,12 +189,43 @@
     <Compile Include="Events\ILoadingChildren.cs" />
     <Compile Include="Events\ICreatedContentLanguage.cs" />
     <Compile Include="Events\ICreatingContentLanguage.cs" />
-    <Compile Include="Events\TypedEventBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypedEvents\ICheckedInContent.cs" />
+    <Compile Include="TypedEvents\ICheckedOutContent.cs" />
+    <Compile Include="TypedEvents\ICheckingInContent.cs" />
+    <Compile Include="TypedEvents\ICheckingOutContent.cs" />
+    <Compile Include="TypedEvents\ICreatedContent.cs" />
+    <Compile Include="TypedEvents\ICreatedContentLanguage.cs" />
+    <Compile Include="TypedEvents\ICreatingContent.cs" />
+    <Compile Include="TypedEvents\ICreatingContentLanguage.cs" />
+    <Compile Include="TypedEvents\IDeletedContentLanguage.cs" />
+    <Compile Include="TypedEvents\IDeletedContentVersion.cs" />
+    <Compile Include="TypedEvents\IDeletingContentLanguage.cs" />
+    <Compile Include="TypedEvents\IDeletingContentVersion.cs" />
+    <Compile Include="TypedEvents\IFailedLoadingContent.cs" />
+    <Compile Include="TypedEvents\ILoadedContent.cs" />
+    <Compile Include="TypedEvents\ILoadedDefaultContent.cs" />
+    <Compile Include="TypedEvents\ILoadingContent.cs" />
+    <Compile Include="TypedEvents\ILoadingDefaultContent.cs" />
+    <Compile Include="TypedEvents\IMovedContent.cs" />
+    <Compile Include="TypedEvents\IMovingContent.cs" />
+    <Compile Include="TypedEvents\IPublishedContent.cs" />
+    <Compile Include="TypedEvents\IPublishingContent.cs" />
+    <Compile Include="TypedEvents\IRejectedContent.cs" />
+    <Compile Include="TypedEvents\IRejectingContent.cs" />
+    <Compile Include="TypedEvents\IRequestedApproval.cs" />
+    <Compile Include="TypedEvents\IRequestingApproval.cs" />
+    <Compile Include="TypedEvents\ISavedContent.cs" />
+    <Compile Include="TypedEvents\ISavingContent.cs" />
+    <Compile Include="TypedEvents\IScheduledContent.cs" />
+    <Compile Include="TypedEvents\ISchedulingContent.cs" />
+    <Compile Include="TypedEvents\TypedEventBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

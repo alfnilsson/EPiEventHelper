@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq.Expressions;
-using System.Reflection;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
@@ -48,11 +47,12 @@ namespace Toders.EPiEventHelper.Tests
                 {
                     continue;
                 }
+                Debug.WriteLine(eventHandlerType.Name);
 
-                Type typedEventHandlerType = Type.GetType("Toders.EPiEventHelper.Events." + eventInfo.Name + "Base`1, Toders.EPiEventHelper");
+                Type typedEventHandlerType = Type.GetType("Toders.EPiEventHelper.TypedEvents." + eventInfo.Name + "Base`1, Toders.EPiEventHelper");
                 Assert.IsNotNull(typedEventHandlerType);
                 Assert.IsTrue(typedEventHandlerType.GetInterfaces().Any(i => i.FullName == eventHandlerType.FullName));
-                Debug.WriteLine(eventHandlerType.Name + " = " + typedEventHandlerType.Name);
+                Debug.WriteLine(" = " + typedEventHandlerType.Name);
             }
         }
 
