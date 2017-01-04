@@ -8,15 +8,20 @@ namespace Toders.EPiEventHelper.Events
         void DeletingContentLanguage(object sender, ContentEventArgs e);
     }
 
-    public abstract class DeletingContentLanguageBase<TContentType> : IDeletingContentLanguage
+    public abstract class DeletingContentLanguageBase<TContentType> : TypedEventBase<TContentType>, IDeletingContentLanguage
         where TContentType : IContent
     {
         public void DeletingContentLanguage(object sender, ContentEventArgs e)
         {
-            var eventArgs = new ContentEventArgs<TContentType>(e);
-            this.DeletingContentLanguage(sender, eventArgs);
+            if (AppliesTo(e.Content) == false)
+            {
+                return;
+            }
+
+            var eventArgs = new TypedContentEventArgs(e);
+            DeletingContentLanguage(sender, eventArgs);
         }
 
-        public abstract void DeletingContentLanguage(object sender, ContentEventArgs<TContentType> e);
+        public abstract void DeletingContentLanguage(object sender, TypedContentEventArgs e);
     }
 }

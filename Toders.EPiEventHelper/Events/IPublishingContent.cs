@@ -8,33 +8,20 @@ namespace Toders.EPiEventHelper.Events
         void PublishingContent(object sender, ContentEventArgs e);
     }
 
-    public abstract class PublishingContentBase<TContentType> : IPublishingContent
+    public abstract class PublishingContentBase<TContentType> : TypedEventBase<TContentType>, IPublishingContent
         where TContentType : IContent
     {
-        /// <summary>
-        /// Gets whether the specified content must be same Content Type as TContentType or can inherit of
-        /// </summary>
-        protected virtual bool AllowInheritance { get { return false; } }
-
         public void PublishingContent(object sender, ContentEventArgs e)
         {
-            bool allowInheritance = AllowInheritance;
-            if (allowInheritance
-                && e.Content is TContentType == false)
+            if (AppliesTo(e.Content) == false)
             {
                 return;
             }
 
-            if (allowInheritance == false
-                && e.Content.GetOriginalType() != typeof(TContentType))
-            {
-                return;
-            }
-
-            var eventArgs = new ContentEventArgs<TContentType>(e);
-            this.PublishingContent(sender, eventArgs);
+            var eventArgs = new TypedContentEventArgs(e);
+            PublishingContent(sender, eventArgs);
         }
 
-        public abstract void PublishingContent(object sender, ContentEventArgs<TContentType> e);
+        public abstract void PublishingContent(object sender, TypedContentEventArgs e);
     }
 }

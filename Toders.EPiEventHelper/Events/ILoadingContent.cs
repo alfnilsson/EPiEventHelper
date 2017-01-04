@@ -8,15 +8,20 @@ namespace Toders.EPiEventHelper.Events
         void LoadingContent(object sender, ContentEventArgs e);
     }
 
-    public abstract class LoadingContentBase<TContentType> : ILoadingContent
+    public abstract class LoadingContentBase<TContentType> : TypedEventBase<TContentType>, ILoadingContent
         where TContentType : IContent
     {
         public void LoadingContent(object sender, ContentEventArgs e)
         {
-            var eventArgs = new ContentEventArgs<TContentType>(e);
-            this.LoadingContent(sender, eventArgs);
+            if (AppliesTo(e.Content) == false)
+            {
+                return;
+            }
+
+            var eventArgs = new TypedContentEventArgs(e);
+            LoadingContent(sender, eventArgs);
         }
 
-        public abstract void LoadingContent(object sender, ContentEventArgs<TContentType> e);
+        public abstract void LoadingContent(object sender, TypedContentEventArgs e);
     }
 }

@@ -8,15 +8,20 @@ namespace Toders.EPiEventHelper.Events
         void SavedContent(object sender, ContentEventArgs e);
     }
 
-    public abstract class SavedContentBase<TContentType> : ISavedContent
+    public abstract class SavedContentBase<TContentType> : TypedEventBase<TContentType>, ISavedContent
         where TContentType : IContent
     {
         public void SavedContent(object sender, ContentEventArgs e)
         {
-            var eventArgs = new ContentEventArgs<TContentType>(e);
-            this.SavedContent(sender, eventArgs);
+            if (AppliesTo(e.Content) == false)
+            {
+                return;
+            }
+
+            var eventArgs = new TypedContentEventArgs(e);
+            SavedContent(sender, eventArgs);
         }
 
-        public abstract void SavedContent(object sender, ContentEventArgs<TContentType> e);
+        public abstract void SavedContent(object sender, TypedContentEventArgs e);
     }
 }

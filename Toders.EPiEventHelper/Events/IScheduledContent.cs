@@ -8,15 +8,20 @@ namespace Toders.EPiEventHelper.Events
         void ScheduledContent(object sender, ContentEventArgs args);
     }
 
-    public abstract class ScheduledContentBase<TContentType> : IScheduledContent
+    public abstract class ScheduledContentBase<TContentType> : TypedEventBase<TContentType>, IScheduledContent
         where TContentType : IContent
     {
         public void ScheduledContent(object sender, ContentEventArgs e)
         {
-            var eventArgs = new ContentEventArgs<TContentType>(e);
-            this.ScheduledContent(sender, eventArgs);
+            if (AppliesTo(e.Content) == false)
+            {
+                return;
+            }
+
+            var eventArgs = new TypedContentEventArgs(e);
+            ScheduledContent(sender, eventArgs);
         }
 
-        public abstract void ScheduledContent(object sender, ContentEventArgs<TContentType> e);
+        public abstract void ScheduledContent(object sender, TypedContentEventArgs e);
     }
 }

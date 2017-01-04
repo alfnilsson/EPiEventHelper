@@ -8,15 +8,20 @@ namespace Toders.EPiEventHelper.Events
         void CreatingContentLanguage(object sender, ContentEventArgs args);
     }
 
-    public abstract class CreatingContentLanguageBase<TContentType> : ICreatingContentLanguage
+    public abstract class CreatingContentLanguageBase<TContentType> : TypedEventBase<TContentType>, ICreatingContentLanguage
         where TContentType : IContent
     {
         public void CreatingContentLanguage(object sender, ContentEventArgs e)
         {
-            var eventArgs = new ContentEventArgs<TContentType>(e);
-            this.CreatingContentLanguage(sender, eventArgs);
+            if (AppliesTo(e.Content) == false)
+            {
+                return;
+            }
+
+            var eventArgs = new TypedContentEventArgs(e);
+            CreatingContentLanguage(sender, eventArgs);
         }
 
-        public abstract void CreatingContentLanguage(object sender, ContentEventArgs<TContentType> e);
+        public abstract void CreatingContentLanguage(object sender, TypedContentEventArgs e);
     }
 }

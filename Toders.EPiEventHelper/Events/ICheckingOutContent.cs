@@ -8,15 +8,20 @@ namespace Toders.EPiEventHelper.Events
         void CheckingOutContent(object sender, ContentEventArgs args);
     }
 
-    public abstract class CheckingOutContentBase<TContentType> : ICheckingOutContent
+    public abstract class CheckingOutContentBase<TContentType> : TypedEventBase<TContentType>, ICheckingOutContent
         where TContentType : IContent
     {
         public void CheckingOutContent(object sender, ContentEventArgs e)
         {
-            var eventArgs = new ContentEventArgs<TContentType>(e);
-            this.CheckingOutContent(sender, eventArgs);
+            if (AppliesTo(e.Content) == false)
+            {
+                return;
+            }
+
+            var eventArgs = new TypedContentEventArgs(e);
+            CheckingOutContent(sender, eventArgs);
         }
 
-        public abstract void CheckingOutContent(object sender, ContentEventArgs<TContentType> e);
+        public abstract void CheckingOutContent(object sender, TypedContentEventArgs e);
     }
 }

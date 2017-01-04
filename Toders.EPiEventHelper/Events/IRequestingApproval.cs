@@ -8,15 +8,20 @@ namespace Toders.EPiEventHelper.Events
         void RequestingApproval(object sender, ContentEventArgs args);
     }
 
-    public abstract class RequestingApprovalBase<TContentType> : IRequestingApproval
+    public abstract class RequestingApprovalBase<TContentType> : TypedEventBase<TContentType>, IRequestingApproval
         where TContentType : IContent
     {
         public void RequestingApproval(object sender, ContentEventArgs e)
         {
-            var eventArgs = new ContentEventArgs<TContentType>(e);
-            this.RequestingApproval(sender, eventArgs);
+            if (AppliesTo(e.Content) == false)
+            {
+                return;
+            }
+
+            var eventArgs = new TypedContentEventArgs(e);
+            RequestingApproval(sender, eventArgs);
         }
 
-        public abstract void RequestingApproval(object sender, ContentEventArgs<TContentType> e);
+        public abstract void RequestingApproval(object sender, TypedContentEventArgs e);
     }
 }

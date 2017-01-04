@@ -8,15 +8,20 @@ namespace Toders.EPiEventHelper.Events
         void CreatedContent(object sender, ContentEventArgs e);
     }
 
-    public abstract class CreatedContentBase<TContentType> : ICreatedContent
+    public abstract class CreatedContentBase<TContentType> : TypedEventBase<TContentType>, ICreatedContent
         where TContentType : IContent
     {
         public void CreatedContent(object sender, ContentEventArgs e)
         {
-            var eventArgs = new ContentEventArgs<TContentType>(e);
-            this.CreatedContent(sender, eventArgs);
+            if (AppliesTo(e.Content) == false)
+            {
+                return;
+            }
+
+            var eventArgs = new TypedContentEventArgs(e);
+            CreatedContent(sender, eventArgs);
         }
 
-        public abstract void CreatedContent(object sender, ContentEventArgs<TContentType> e);
+        public abstract void CreatedContent(object sender, TypedContentEventArgs e);
     }
 }

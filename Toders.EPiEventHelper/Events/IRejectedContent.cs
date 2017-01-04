@@ -8,15 +8,20 @@ namespace Toders.EPiEventHelper.Events
         void RejectedContent(object sender, ContentEventArgs args);
     }
 
-    public abstract class RejectedContentBase<TContentType> : IRejectedContent
+    public abstract class RejectedContentBase<TContentType> : TypedEventBase<TContentType>, IRejectedContent
         where TContentType : IContent
     {
         public void RejectedContent(object sender, ContentEventArgs e)
         {
-            var eventArgs = new ContentEventArgs<TContentType>(e);
-            this.RejectedContent(sender, eventArgs);
+            if (AppliesTo(e.Content) == false)
+            {
+                return;
+            }
+
+            var eventArgs = new TypedContentEventArgs(e);
+            RejectedContent(sender, eventArgs);
         }
 
-        public abstract void RejectedContent(object sender, ContentEventArgs<TContentType> e);
+        public abstract void RejectedContent(object sender, TypedContentEventArgs e);
     }
 }

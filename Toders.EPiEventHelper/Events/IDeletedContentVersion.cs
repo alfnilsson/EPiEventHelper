@@ -8,15 +8,20 @@ namespace Toders.EPiEventHelper.Events
         void DeletedContentVersion(object sender, ContentEventArgs e);
     }
 
-    public abstract class DeletedContentVersionBase<TContentType> : IDeletedContentVersion
+    public abstract class DeletedContentVersionBase<TContentType> : TypedEventBase<TContentType>, IDeletedContentVersion
         where TContentType : IContent
     {
         public void DeletedContentVersion(object sender, ContentEventArgs e)
         {
-            var eventArgs = new ContentEventArgs<TContentType>(e);
-            this.DeletedContentVersion(sender, eventArgs);
+            if (AppliesTo(e.Content) == false)
+            {
+                return;
+            }
+
+            var eventArgs = new TypedContentEventArgs(e);
+            DeletedContentVersion(sender, eventArgs);
         }
 
-        public abstract void DeletedContentVersion(object sender, ContentEventArgs<TContentType> e);
+        public abstract void DeletedContentVersion(object sender, TypedContentEventArgs e);
     }
 }

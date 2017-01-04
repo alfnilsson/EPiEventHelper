@@ -51,6 +51,7 @@ namespace Toders.EPiEventHelper.Tests
 
                 Type typedEventHandlerType = Type.GetType("Toders.EPiEventHelper.Events." + eventInfo.Name + "Base`1, Toders.EPiEventHelper");
                 Assert.IsNotNull(typedEventHandlerType);
+                Assert.IsTrue(typedEventHandlerType.GetInterfaces().Any(i => i.FullName == eventHandlerType.FullName));
                 Debug.WriteLine(eventHandlerType.Name + " = " + typedEventHandlerType.Name);
             }
         }

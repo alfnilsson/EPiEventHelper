@@ -189,7 +189,7 @@
     <Compile Include="Events\ILoadingChildren.cs" />
     <Compile Include="Events\ICreatedContentLanguage.cs" />
     <Compile Include="Events\ICreatingContentLanguage.cs" />
-    <Compile Include="Events\ContentEventArgs.cs" />
+    <Compile Include="Events\TypedEventBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
