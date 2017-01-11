@@ -18,6 +18,6 @@ namespace Toders.EPiEventHelper.TypedEvents
             SchedulingContent(sender, eventArgs);
         }
 
-        public abstract void SchedulingContent(object sender, TypedContentEventArgs e);
+        protected abstract void SchedulingContent(object sender, TypedContentEventArgs e);
     }
 }

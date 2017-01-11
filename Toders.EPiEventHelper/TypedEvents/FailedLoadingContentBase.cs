@@ -18,6 +18,6 @@ namespace Toders.EPiEventHelper.TypedEvents
             FailedLoadingContent(sender, eventArgs);
         }
 
-        public abstract void FailedLoadingContent(object sender, TypedContentEventArgs e);
+        protected abstract void FailedLoadingContent(object sender, TypedContentEventArgs e);
     }
 }

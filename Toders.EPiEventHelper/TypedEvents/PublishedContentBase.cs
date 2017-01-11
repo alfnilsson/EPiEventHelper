@@ -18,6 +18,6 @@ namespace Toders.EPiEventHelper.TypedEvents
             PublishedContent(sender, eventArgs);
         }
 
-        public abstract void PublishedContent(object sender, TypedContentEventArgs e);
+        protected abstract void PublishedContent(object sender, TypedContentEventArgs e);
     }
 }

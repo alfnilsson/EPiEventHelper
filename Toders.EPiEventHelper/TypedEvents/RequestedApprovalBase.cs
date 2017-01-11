@@ -18,6 +18,6 @@ namespace Toders.EPiEventHelper.TypedEvents
             RequestedApproval(sender, eventArgs);
         }
 
-        public abstract void RequestedApproval(object sender, TypedContentEventArgs e);
+        protected abstract void RequestedApproval(object sender, TypedContentEventArgs e);
     }
 }

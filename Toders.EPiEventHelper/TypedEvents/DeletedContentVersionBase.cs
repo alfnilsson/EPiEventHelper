@@ -18,6 +18,6 @@ namespace Toders.EPiEventHelper.TypedEvents
             DeletedContentVersion(sender, eventArgs);
         }
 
-        public abstract void DeletedContentVersion(object sender, TypedContentEventArgs e);
+        protected abstract void DeletedContentVersion(object sender, TypedContentEventArgs e);
     }
 }

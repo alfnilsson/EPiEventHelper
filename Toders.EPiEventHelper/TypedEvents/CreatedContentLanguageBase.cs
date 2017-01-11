@@ -18,6 +18,6 @@ namespace Toders.EPiEventHelper.TypedEvents
             CreatedContentLanguage(sender, eventArgs);
         }
 
-        public abstract void CreatedContentLanguage(object sender, TypedContentEventArgs e);
+        protected abstract void CreatedContentLanguage(object sender, TypedContentEventArgs e);
     }
 }

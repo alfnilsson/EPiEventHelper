@@ -18,6 +18,6 @@ namespace Toders.EPiEventHelper.TypedEvents
             RejectedContent(sender, eventArgs);
         }
 
-        public abstract void RejectedContent(object sender, TypedContentEventArgs e);
+        protected abstract void RejectedContent(object sender, TypedContentEventArgs e);
     }
 }

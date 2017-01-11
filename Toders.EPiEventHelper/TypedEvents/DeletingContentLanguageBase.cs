@@ -18,6 +18,6 @@ namespace Toders.EPiEventHelper.TypedEvents
             DeletingContentLanguage(sender, eventArgs);
         }
 
-        public abstract void DeletingContentLanguage(object sender, TypedContentEventArgs e);
+        protected abstract void DeletingContentLanguage(object sender, TypedContentEventArgs e);
     }
 }

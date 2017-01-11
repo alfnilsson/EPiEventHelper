@@ -18,6 +18,6 @@ namespace Toders.EPiEventHelper.TypedEvents
             SavingContent(sender, eventArgs);
         }
 
-        public abstract void SavingContent(object sender, TypedContentEventArgs e);
+        protected abstract void SavingContent(object sender, TypedContentEventArgs e);
     }
 }

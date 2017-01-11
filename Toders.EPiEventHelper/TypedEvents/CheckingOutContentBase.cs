@@ -18,6 +18,6 @@ namespace Toders.EPiEventHelper.TypedEvents
             CheckingOutContent(sender, eventArgs);
         }
 
-        public abstract void CheckingOutContent(object sender, TypedContentEventArgs e);
+        protected abstract void CheckingOutContent(object sender, TypedContentEventArgs e);
     }
 }
